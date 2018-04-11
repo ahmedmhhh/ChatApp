@@ -13,7 +13,7 @@ import utils.Session;
 
 public class MainActivity extends AppCompatActivity {
     TextView textView ;
-    Button login,register,logout;
+    Button login,register,logout,chatrooms;
     User user;
 
     @Override
@@ -25,6 +25,14 @@ public class MainActivity extends AppCompatActivity {
         login = (Button) findViewById(R.id.login);
         register = (Button) findViewById(R.id.register);
         logout = (Button) findViewById(R.id.logout);
+        chatrooms = (Button) findViewById(R.id.chatroombtn);
+
+        chatrooms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,ChatRoomsActivity.class));
+            }
+        });
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override

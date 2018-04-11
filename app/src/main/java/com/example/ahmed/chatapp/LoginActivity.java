@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.fourhcode.forhutils.FUtilsValidation;
 
+import Model.LoginResponse;
 import Model.MainResponse;
 import Model.User;
 import retrofit2.Call;
@@ -40,13 +41,16 @@ Button loginbtn;
                     user.email = email.getText().toString();
                     user.password = password.getText().toString();
 
-                    WebService.getInstance().getApi().loginUser(user).enqueue(new Callback<MainResponse>() {
+                    WebService.getInstance().getApi().loginUser(user).enqueue(new Callback<LoginResponse>() {
                         @Override
-                        public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+                        public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                             if(response.body().status==2){
                                 Toast.makeText(LoginActivity.this,response.body().message,Toast.LENGTH_LONG).show();
                             }else if (response.body().status==1){
                                 Toast.makeText(LoginActivity.this,response.body().message,Toast.LENGTH_LONG).show();
+                                user.username = response.body().user.user_name;
+                                user.id=Integer.parseInt(response.body().user.id);
+                                user.isAdmin = response.body().user.is_user_admin.equals("1");
                                 Session.getInstance().loginUser(user);
                                 startActivity(new Intent(LoginActivity.this,MainActivity.class));
                                 finish();
@@ -56,7 +60,7 @@ Button loginbtn;
                         }
 
                         @Override
-                        public void onFailure(Call<MainResponse> call, Throwable t) {
+                        public void onFailure(Call<LoginResponse> call, Throwable t) {
                             Toast.makeText(LoginActivity.this,t.getLocalizedMessage(),Toast.LENGTH_LONG).show();
                         }
                     });
